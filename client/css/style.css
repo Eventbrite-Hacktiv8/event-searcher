@@ -1,0 +1,16 @@
+.card{
+    margin-bottom: 25px;
+}
+
+.card-columns{
+    column-count: 3;
+}
+
+.card-title{
+    font-weight: 500;
+    color: #73a9aa;
+}
+/* 
+.card-block{
+    padding: 5px;
+} */
