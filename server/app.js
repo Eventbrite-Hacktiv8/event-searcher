@@ -1,21 +1,29 @@
+if (process.env.NODE_ENV === 'development') {
+    require('dotenv').config()
+}
 
-require('dotenv').config()
-const app = require('express')();
-const PORT = process.env.PORT || 3000
-const routes = require('./routes');
-const body = require('body-parser');
+const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const app = express()
+const routes = require('./routes')
+const { errorHandler } = require('./middlewares/errorHandler')
 
-app.use(body.urlencoded({ extended: false }))
-app.use(body.json())
-app.use('/', routes);
-app.use(cors())
-mongoose.connect('mongodb://localhost:27017/hacktivGit', {useNewUrlParser: true})
-.then(data => {
-    console.log('success')
+const PORT = process.env.PORT || 3000
+
+mongoose.connect('mongodb://localhost:27017/event-searcher', {useNewUrlParser: true})
+.then(() => {
+    console.log('mongodb connected')
 }).catch(err => {
-    console.log('error')
+    console.log('failed connect to mongodb', err)
 })
+
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+app.use(cors())
+
+app.use('/', routes)
+app.use(errorHandler)
 
 app.listen(PORT, function () {
     console.log(`listen to port ${PORT}`)
