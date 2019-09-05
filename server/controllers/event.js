@@ -1,4 +1,5 @@
 const axiosEvent = require('../config/axiosEvent');
+const Event = require('../models/event');
 
 class EventController {
     static getAllEvents(req, res, next) {
@@ -63,8 +64,29 @@ class EventController {
             .catch(next)
     }
 
-    static bookmark(req, res, next) {
-        
+    static saveEvent(req, res, next) {
+        const { eventId, name, venue } = req.body;
+
+        Event.findOne({eventId})
+        .then(event => {
+            if (event) {
+                throw new Error('Event already saved');
+            } else {
+                return Event.create({
+                    eventId,
+                    name,
+                    venue
+                })
+            }
+        })
+        .then(event => {
+            console.log(event);
+            res.status(201).json({
+                message: 'Event saved'
+            })
+        })
+        .catch(next);
+
     }
 }
 
