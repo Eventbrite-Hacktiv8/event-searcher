@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id"
+        content="498351576541-ndnpoigf7epvjav6ju6uvp5h66fvoqt4.apps.googleusercontent.com">
+    <link rel=“stylesheet” href=“https://use.fontawesome.com/releases/v5.8.2/css/all.css”> <script
+        src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+        </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Hacktivgit</title>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-light">
+       <ul class="navbar-nav">
+            <li class="nav-item">
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </li>
+        </ul>
+        <ul class="navbar navbar-expand-sm bg-light">
+                <a id="signout" href="#" onclick="signOut();"><i class="fas fa-sign-out-alt"></i></a>
+        </ul>
+
+    </nav>
+</body>
+<script>
+    function onSignIn(googleUser) {
+
+    let idToken = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        url: 'http://localhost:3000/user/signin',
+        method: 'POST',
+        data: {
+            idToken
+        }
+    }).done(response => {
+        localStorage.setItem('token', response.token)
+    }).fail(function (jqXHR, textStatus) {
+        console.log('Error:', textStatus);
+    });
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+      localStorage.removeItem('token')
+    });
+  }
+</script>
+
+</html>
