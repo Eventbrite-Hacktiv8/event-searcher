@@ -10,6 +10,24 @@ $(document).ready(function() {
         clearEventList();
         filterByCategory(categoryId);
     })
+
+    $('#searchByCity').keypress(function(event) {
+        let keycode = event.keyCode || event.which;
+        if (keycode == '13') {
+            event.preventDefault();
+            clearEventList();
+            filterByCity($(this).val());
+        }
+    })
+    $('#searchByEventName').keypress(function(event) {
+        let keycode = event.keyCode || event.which;
+        if (keycode == '13') {
+            event.preventDefault();
+            clearEventList();
+            filterByEventName($(this).val());
+        }
+    })
+
 })
 
 function getEvents() {
@@ -143,6 +161,34 @@ function insertOptionCategory(data) {
 function filterByCategory(categoryId) {
     axios({
         url: `${baseURL}/events/search?categories=${categoryId}`,
+        method: 'GET'
+    })
+        .then(({data}) => {
+            console.log(data)
+            showCard(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+function filterByCity(city) {
+    axios({
+        url: `${baseURL}/events/search?location.address=${city}`,
+        method: 'GET'
+    })
+        .then(({data}) => {
+            console.log(data)
+            showCard(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+function filterByEventName(eventName) {
+    axios({
+        url: `${baseURL}/events/search?q=${eventName}`,
         method: 'GET'
     })
         .then(({data}) => {
