@@ -2,8 +2,11 @@ const baseURL = 'http://localhost:3000';
 $(document).ready(function() {
     console.log('ready')
 
-    getEvents();
-    getCategories();
+    if (localStorage.getItem('token')) {
+        successLogin();
+    } else {
+        successLogout();
+    }
 
     $('#categoryList').change(function() {
         let categoryId = $(this).val();
@@ -26,6 +29,11 @@ $(document).ready(function() {
             clearEventList();
             filterByEventName($(this).val());
         }
+    })
+
+    $('#btnEvents').click(function(event) {
+        event.preventDefault();
+        showEvents();
     })
 
 })
@@ -200,3 +208,24 @@ function filterByEventName(eventName) {
         })
 }
 
+
+function successLogin() {
+    getEvents();
+    getCategories();
+    $('#loginForm').hide();
+    $('#btnLogout').show();
+    showEvents();
+}
+
+function successLogout() {
+    $('#loginForm').show();
+    $('#btnLogout').hide();
+    hideEvents();
+}
+
+function showEvents() {
+    $('#eventsContainer').show();
+}
+function hideEvents() {
+    $('#eventsContainer').hide();
+}

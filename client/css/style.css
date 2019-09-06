@@ -1,16 +1,5 @@
-.card{
-    margin-bottom: 25px;
-}
-
-.card-columns{
-    column-count: 3;
-}
-
-.card-title{
-    font-weight: 500;
-    color: #73a9aa;
-}
-/* 
-.card-block{
-    padding: 5px;
-} */
+body{
+    font-family: 'Titillium Web', sans-serif;
+    background-color: #F3F7F6;
+    padding-top: 50px;
+  }
