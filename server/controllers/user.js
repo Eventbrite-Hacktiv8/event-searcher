@@ -38,7 +38,9 @@ class UserController{
                 let token = generateToken(dataUser)
                 console.log(token);
                 res.json({
-                    token
+                    token,
+                    UserId: user.id,
+                    name: user.name
                 })
             })
         }).catch(err     => {
