@@ -40,15 +40,15 @@ class EventController {
         let fields = Object.keys(req.query);
         let values = Object.values(req.query);
 
-        console.log(fields)
-        console.log(values)
+        // console.log(fields)
+        // console.log(values)
         let searchUri = '';
 
         fields.forEach((field, i) => {
             searchUri += `${field}=${values[i]}&`;
         })
 
-        console.log(searchUri)
+       // console.log(searchUri)
         axiosEvent.get(`/events/search/?expand=venue&${searchUri}`)
             .then(({data}) => {
                 let events = [];

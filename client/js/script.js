@@ -12,13 +12,37 @@ $(document).ready(function() {
     })
 
     $('#searchByCity').keypress(function(event) {
+        $('#wet').empty()
         let keycode = event.keyCode || event.which;
         if (keycode == '13') {
             event.preventDefault();
             clearEventList();
             filterByCity($(this).val());
+
+            $.ajax({
+                url: 'http://localhost:3000/weather/getWeather',
+                method: 'POST',
+                data: {
+                    city:$(this).val()
+                } 
+            }).done(response => {
+                let cuaca = response.cuaca
+                let temperature = response.temp
+                console.log(cuaca, temperature)
+                let insert = `<label class="input-group-text" for="inputGroupSelect02">${String(cuaca)}</label>`
+                let insert1 = `<label class="input-group-text" for="inputGroupSelect02">${String(temperature)}</label>`
+                $('#wet').append(insert)
+                $('#wet').append(insert1)
+
+                // //localStorage.setItem('token', response.token)                        <label class="input-group-text" id ="temp" for="inputGroupSelect02">Temp</label>
+                // console.log(response);
+
+            }).fail(function (jqXHR, textStatus) {
+                console.log('Error:', textStatus);
+            });
         }
     })
+    ;
     $('#searchByEventName').keypress(function(event) {
         let keycode = event.keyCode || event.which;
         if (keycode == '13') {
@@ -154,7 +178,7 @@ function createOptionCategory(category) {
 function insertOptionCategory(data) {
     data.forEach(category => {
         let option = createOptionCategory(category);
-        $('#categoryList').append(option)
+            $('#categoryList').append(option)
     })
 }
 
