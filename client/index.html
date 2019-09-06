@@ -10,6 +10,8 @@
     <link rel=“stylesheet” href=“https://use.fontawesome.com/releases/v5.8.2/css/all.css”> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     
     <title>Event Searcher</title>
 </head>
@@ -34,7 +36,7 @@
                     <div class="g-signin2" data-onsuccess="onSignIn"></div>
                 </li>
                 <li class="nav-item">
-                    <a id="signout" href="#" onclick="signOut();"><i class="fas fa-sign-out-alt"></i></a>
+                    <button class="btn btn-danger" id="signout" onclick="signOut();"> LOGOUT </i></button>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
