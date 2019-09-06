@@ -1,13 +1,17 @@
-const baseURL = 'http://localhost:3001';
+const baseURL = 'http://localhost:3000';
 $(document).ready(function() {
     console.log('ready')
 
-    getEvents();
-    getCategories();
+    if (localStorage.getItem('token')) {
+        successLogin();
+    } else {
+        successLogout();
+    }
 
     $('#categoryList').change(function() {
         let categoryId = $(this).val();
         clearEventList();
+        clearMyEventList();
         filterByCategory(categoryId);
     })
 
@@ -16,6 +20,7 @@ $(document).ready(function() {
         if (keycode == '13') {
             event.preventDefault();
             clearEventList();
+            clearMyEventList();
             filterByCity($(this).val());
         }
     })
@@ -24,8 +29,24 @@ $(document).ready(function() {
         if (keycode == '13') {
             event.preventDefault();
             clearEventList();
+            clearMyEventList();
+            hideMyEvents();
             filterByEventName($(this).val());
+            showEvents();
         }
+    })
+
+    $('#btnEvents').click(function(event) {
+        event.preventDefault();
+        showEvents();
+        hideMyEvents();
+    })
+
+    $('#btnMyEvents').click(function(event) {
+        event.preventDefault();
+        hideEvents();
+        getMyEvents(localStorage.getItem('UserId'));
+        showMyEvents();
     })
 
 })
@@ -36,8 +57,23 @@ function getEvents() {
         method: 'GET'
     })
         .then(({data}) => {
-            console.log(data)
+            console.log(data, 'get events')
             showCard(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+function getMyEvents(UserId) {
+    clearMyEventList();
+    axios({
+        url: `${baseURL}/events/${UserId}`,
+        method: 'GET'
+    })
+        .then(({data}) => {
+            console.log(data)
+            createMyEventContainer(data)
         })
         .catch(err => {
             console.log(err)
@@ -47,7 +83,7 @@ function getEvents() {
 function createCard(event, i) {
     let date = formatDate(event.start);
     let card = `
-    <div class="col-sm-3 d-flex">
+    <div class="col-sm-3 d-flex mb-4">
         <div class="card" style="width: 22rem;">
                 <span class="eventId" hidden>${event.id}</span>
                 <span class="eventAddress" hidden>${event.venue.address}</span>
@@ -74,6 +110,10 @@ function showCard(data) {
 
 function clearEventList() {
     $('#eventList').html('')
+}
+
+function clearMyEventList() {
+    $('#myEventList').html('')
 }
 
 function formatDate(strDate) {
@@ -103,17 +143,26 @@ function saveEvent(event) {
     let eventId = $('.eventId')[Number(index)].textContent;;
     let name = $('.eventName')[Number(index)].textContent;
     let venue = $('.venue')[Number(index)].textContent;
+    let date = $('.date')[Number(index)].textContent;
+    let imageUrl = $('.imgUrl')[Number(index)].getAttribute('src');
+    let UserId = localStorage.getItem('UserId');
 
     console.log(eventId)
     console.log(name)
     console.log(venue)
+    console.log(date)
+    console.log(imageUrl)
+    console.log(UserId)
     axios({
         url: `${baseURL}/events`,
         method: 'POST',
         data: {
             eventId,
             name,
-            venue
+            venue,
+            date,
+            imageUrl,
+            UserId
         }
     })
         .then((response) => {
@@ -200,3 +249,61 @@ function filterByEventName(eventName) {
         })
 }
 
+
+function successLogin() {
+    getEvents();
+    getMyEvents(localStorage.getItem('UserId'));
+    getCategories();
+    $('#loginForm').hide();
+    $('#btnLogout').show();
+    $('#userLoggedIn').text(localStorage.getItem('name'))
+    $('#userLoggedIn').show();
+    showEvents();
+}
+
+function successLogout() {
+    $('#loginForm').show();
+    $('#searchByEventName').text('')
+    $('#userLoggedIn').text('')
+    $('#userLoggedIn').hide();
+    $('#btnLogout').hide();
+    hideEvents();
+    hideMyEvents();
+}
+
+function showEvents() {
+    $('#eventsContainer').show();
+}
+function hideEvents() {
+    $('#eventsContainer').hide();
+}
+
+function showMyEvents() {
+    $('#myEventsContainer').show();
+}
+
+function hideMyEvents() {
+    $('#myEventsContainer').hide();
+}
+
+function createMyEventContainer(data) {
+    let date = formatDate(event.date);
+    data.forEach((event, i) => {
+        let card = `
+        <div class="col-sm-3 d-flex mb-4">
+            <div class="card" style="width: 22rem;">
+                    <span class="eventId" hidden>${event.id}</span>
+                    <span class="eventAddress" hidden>${event.venue}</span>
+                    <img src="${event.imageUrl}" alt="" id="imgUrl" class="imgUrl">
+                    <div class="card-body">
+                        <p class="mb-0 date" style="font-size: 0.8rem" id="date">${date}</p>
+                        <strong class="eventName" id="eventName" style="font-size: 1.2rem">${event.name}</strong>
+                        <p class="venue" id="venue" style="font-size: 0.9rem">${event.venue}</p>
+                    </div>
+            
+            </div>
+        </div>
+        `
+        $('#myEventList').append(card);
+    });
+}
