@@ -3,6 +3,13 @@ $(document).ready(function() {
     console.log('ready')
 
     getEvents();
+    getCategories();
+
+    $('#categoryList').change(function() {
+        let categoryId = $(this).val();
+        clearEventList();
+        filterByCategory(categoryId);
+    })
 })
 
 function getEvents() {
@@ -43,8 +50,12 @@ function createCard(event, i) {
 function showCard(data) {
     data.forEach((event, i) => {
         let card = createCard(event, i);
-        $('#eventList').append(card)
+        $('#eventList').append(card);
     });
+}
+
+function clearEventList() {
+    $('#eventList').html('')
 }
 
 function formatDate(strDate) {
@@ -102,3 +113,44 @@ function saveEvent(event) {
             // alert(err.message)
         })
 }
+
+function getCategories() {
+    axios({
+        url: `${baseURL}/categories`,
+        method: 'GET'
+    })
+        .then(({data}) => {
+            console.log(data)
+            insertOptionCategory(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+function createOptionCategory(category) {
+    let option = `<option value="${category.id}">${category.name}</option>`;
+    return option;
+}
+
+function insertOptionCategory(data) {
+    data.forEach(category => {
+        let option = createOptionCategory(category);
+        $('#categoryList').append(option)
+    })
+}
+
+function filterByCategory(categoryId) {
+    axios({
+        url: `${baseURL}/events/search?categories=${categoryId}`,
+        method: 'GET'
+    })
+        .then(({data}) => {
+            console.log(data)
+            showCard(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
