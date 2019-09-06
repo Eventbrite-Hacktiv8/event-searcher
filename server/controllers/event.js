@@ -49,7 +49,7 @@ class EventController {
         })
 
         console.log(searchUri)
-        axiosEvent.get(`/events/search/?location.address=Jakarta&expand=venue&${searchUri}`)
+        axiosEvent.get(`/events/search/?expand=venue&${searchUri}`)
             .then(({data}) => {
                 let events = [];
 
