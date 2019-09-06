@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+        <form>
+                <label>event name:</label>
+                <input id="event-name">
+                <label>start time:</label>
+                <input id="event-start">
+                <label>end time:</label>
+                <input id="event-end">
+                <label>location:</label>
+                <input id="event-location">
+                <label>notes:</label>
+                <input id="event-notes">
+            </form>
+        <button id="calendar-submit"> Add this event to calendar</button>
+</body>
+<script>
+    $('#calendar-submit').click(function(){
+        printThis();
+        submitForm();
+    });
+
+    function printThis(){
+        console.log("print")
+    }
+
+    function submitForm(){
+        $.ajax({
+            url: `http://localhost:3000/calendar/event`,
+            type: 'POST',
+            data: {
+                /* start:'2019-07-17T06:00:00-0400',
+                end:'2019-07-17T06:00:00-0400',
+                title:'July1', */
+                start: $('#event-start').val(),
+                end: $('#event-end').val(),
+                title: $('#event-name').val(),
+                location: $('#event-location').val(),
+                notes: $('#event-notes').val()
+            },
+            crossDomain: true})
+            .done(function(){
+                console.log('success')
+            })
+            .fail(function(err){
+                console.log('failed retrieving users repositories');
+                console.log(err);
+            })
+    }
+</script>
+</html>
