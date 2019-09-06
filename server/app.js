@@ -18,8 +18,8 @@ mongoose.connect('mongodb://localhost:27017/event-searcher', {useNewUrlParser: t
     console.log('failed connect to mongodb', err)
 })
 
-app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 
 app.use('/', routes)
