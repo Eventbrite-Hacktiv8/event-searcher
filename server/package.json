@@ -4,7 +4,9 @@
   "description": "grup projek",
   "main": "./server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development nodemon app.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -19,10 +21,13 @@
   "homepage": "https://github.com/Eventbrite-Hacktiv8/event-searcher#readme",
   "dependencies": {
     "axios": "^0.19.0",
+    "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "google-auth-library": "^5.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.12"
   }
 }
