@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id"
+    content="498351576541-ndnpoigf7epvjav6ju6uvp5h66fvoqt4.apps.googleusercontent.com">
+    
+    <link rel=“stylesheet” href=“https://use.fontawesome.com/releases/v5.8.2/css/all.css”> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -27,6 +31,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
+                <li class="nav-item">
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-danger" id="signout" onclick="signOut();"> LOGOUT </i></button>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <div class="input-group mb-3">
@@ -36,6 +46,7 @@
                     </div>
                 </div>
             </form>
+            
         </div>
     </nav>
     
@@ -107,5 +118,31 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="./js/script.js"></script>
+    
+    <script>
+        function onSignIn(googleUser) {
+            
+            let idToken = googleUser.getAuthResponse().id_token;
+            $.ajax({
+                url: 'http://localhost:3000/user/signin',
+                method: 'POST',
+                data: {
+                    idToken
+                }
+            }).done(response => {
+                localStorage.setItem('token', response.token)
+            }).fail(function (jqXHR, textStatus) {
+                console.log('Error:', textStatus);
+            });
+        }
+        
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+                localStorage.removeItem('token')
+            });
+        }
+    </script>
 </body>
 </html>
