@@ -18,25 +18,25 @@ class UserController{
                 email: payload.email
             }).then(result => {
                 if (!result) {
-                    console.log("masu if")
+                   
                     return User.create({
                         name: payload.name,
                         email: payload.email,
                         password: encrypt(process.env.PASSWORD)
                     })
                 } else {
-                    console.log("masu else")
+                   
                     return result
                 }
             }).then(user => {
-                console.log('user');
+                //sconsole.log('user');
                 let dataUser = {
                     id: user.id,
                     name: user.name,
                     email: user.email
                 }
                 let token = generateToken(dataUser)
-                console.log(token);
+                //console.log(token);
                 res.json({
                     token,
                     UserId: user.id,

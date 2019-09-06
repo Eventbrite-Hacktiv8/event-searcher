@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +16,12 @@
     <link rel="stylesheet" href="./css/style.css">
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    
+
     <title>Event Searcher</title>
 </head>
+
 <body>
-    
+
     <!-- Nav bar     -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="mainNavbar">
         <div class="container">
@@ -53,7 +55,7 @@
             </div>
         </div>
     </nav>
-    
+
 
     <div class="container" id="loginForm">
             <div class="row justify-content-center mb-5 mt-5">
@@ -76,8 +78,11 @@
                                     <!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p> -->
                             </form>
                     </div>
+                    <!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p> -->
+                </form>
             </div>
-            
+        </div>
+
     </div>
     
     
@@ -95,14 +100,23 @@
             </div>
             <div class="row-4">
                 <div class="input-group mb-3">
-                    <input class="form-control" type="search" placeholder="Search by city" id="searchByCity"> 
+                    <input class="form-control" type="search" placeholder="Search by city" id="searchByCity"
+                        onclick="getWeather()" name="city">
                     <div class="input-group-append">
                         <label class="input-group-text" for="inputGroupSelect02">Search</label>
                     </div>
                 </div>
             </div>
+            <div class="row-4">
+                <div class="input-group mb-3">
+                    <div id="wet" class="input-group-append">
+                        <label class="input-group-text" id ="temp" for="inputGroupSelect02">Temp</label>
+                        <label class="input-group-text" id ="cuaca" for="inputGroupSelect02">Cuaca</label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row justify-content-center" id="eventList">  
+        <div class="row justify-content-center" id="eventList">
             <!-- <div class="col-sm-3 d-flex">
                 <div class="card" style="width: 22rem;">
                     <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F70364891%2F290055289112%2F1%2Foriginal.20190829-162010?h=200&w=450&auto=compress&rect=0%2C0%2C2160%2C1080&s=a9820259ff548ebc7eacf007af8e1dff" class="card-img-top" alt="">
@@ -130,12 +144,13 @@
     
     
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="./js/script.js"></script>
-    
+
     <script>
         function onSignIn(googleUser) {
-            
+
             let idToken = googleUser.getAuthResponse().id_token;
             $.ajax({
                 url: 'http://localhost:3000/user/signin',
@@ -152,7 +167,7 @@
                 console.log('Error:', textStatus);
             });
         }
-        
+
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
@@ -163,6 +178,25 @@
                 successLogout();
             });
         }
+        function getWeather() { 
+            console.log($("#searchByCity").val());
+            // $.ajax({
+            //     url: 'http://localhost:3000/weather/getWeather',
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     data: {
+            //         city:$("#searchByCity").val()
+            //     } 
+            // }).done(response => {
+            //     //localStorage.setItem('token', response.token)
+            //     console.log(response);
+            // }).fail(function (jqXHR, textStatus) {
+            //     console.log('Error:', textStatus);
+            // });
+        }
     </script>
 </body>
+
 </html>
