@@ -1,4 +1,4 @@
-const axiosEvent = require('../config/axiosEvent');
+const axiosEvent = require('../config/axiosEventbrite');
 const Event = require('../models/event');
 
 class EventController {
@@ -29,7 +29,7 @@ class EventController {
 
                 // }
 
-                console.log(events[0]);
+                // console.log(events[0]);
                 
                 res.status(200).json(events);
             })
@@ -49,9 +49,28 @@ class EventController {
         })
 
         console.log(searchUri)
-        axiosEvent.get(`/events/search/?${searchUri}`)
-            .then(events => {
-                res.status(200).json(events.data);
+        axiosEvent.get(`/events/search/?location.address=Jakarta&expand=venue&${searchUri}`)
+            .then(({data}) => {
+                let events = [];
+
+                data.events.forEach((event, i) => {
+                    if (i <= 10) {
+                        let {id, name, description, start, end, is_free, venue, logo} = event;
+                    
+                    let obj = {
+                        id,
+                        name: name.text,
+                        description: description.text,
+                        start: start.local,
+                        end: end.local,
+                        is_free,
+                        venue,
+                        logo
+                    }
+                    events.push(obj);
+                    }
+                })
+                res.status(200).json(events);
             })
             .catch(next);
     }
