@@ -38,13 +38,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" id="btnEvents" >Events</a>
+                        <a class="nav-link" id="btnEvents" style="cursor: pointer">Events</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" id="btnMyEvents">My Events</a>
+                        <a class="nav-link active" id="btnMyEvents" style="cursor: pointer">My Events</a>
                     </li>
-                    <li class="nav-item ml-2">
-                        <a class="btn btn-danger" href="#" id="btnLogout" onclick="signOut();" style="display: none">Logout</a>
+                    <li class="nav-item ml-4">
+                        <h5 class="nav-link active" id="userLoggedIn" style="display: none"></h5>
+                    </li>
+                    <li class="nav-item ml-2 mt-2">
+                        <a class="btn btn-sm btn-danger" href="#" id="btnLogout" onclick="signOut();" style="display: none">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -113,6 +116,16 @@
             </div> -->
         </div>
     </div>
+
+    <div class="container mt-5" id="myEventsContainer" style="display: none">
+        <div class="row justify-content-center mb-5 mt-5">
+            <h1 class="">My Event List</h1>
+        </div>
+        
+        <div class="row justify-content-center" id="myEventList">  
+               
+        </div>
+    </div>
     
     
     
@@ -132,6 +145,8 @@
                 }
             }).done(response => {
                 localStorage.setItem('token', response.token)
+                localStorage.setItem('UserId', response.UserId)
+                localStorage.setItem('name', response.name)
                 successLogin();
             }).fail(function (jqXHR, textStatus) {
                 console.log('Error:', textStatus);
@@ -143,6 +158,8 @@
             auth2.signOut().then(function () {
                 console.log('User signed out.');
                 localStorage.removeItem('token');
+                localStorage.removeItem('UserId');
+                localStorage.removeItem('name');
                 successLogout();
             });
         }

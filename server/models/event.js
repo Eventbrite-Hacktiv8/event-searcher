@@ -10,7 +10,22 @@ const EventSchema = new Schema({
         type: String,
         required: true
     },
+    description: {
+      type: String  
+    },
     venue: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: String,
+        required: true
+    },
+    imageUrl: {
+        type: String,
+        required: true
+    },
+    UserId: {
         type: String,
         required: true
     }

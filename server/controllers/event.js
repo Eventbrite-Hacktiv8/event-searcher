@@ -37,6 +37,7 @@ class EventController {
     }
 
     static filter(req, res, next) {
+        console.log('masuk filter')
         let fields = Object.keys(req.query);
         let values = Object.values(req.query);
 
@@ -84,7 +85,7 @@ class EventController {
     }
 
     static saveEvent(req, res, next) {
-        const { eventId, name, venue } = req.body;
+        const { eventId, name, venue, date, imageUrl, UserId } = req.body;
 
         Event.findOne({eventId})
         .then(event => {
@@ -94,7 +95,10 @@ class EventController {
                 return Event.create({
                     eventId,
                     name,
-                    venue
+                    venue,
+                    date,
+                    imageUrl,
+                    UserId
                 })
             }
         })
@@ -106,6 +110,18 @@ class EventController {
         })
         .catch(next);
 
+    }
+
+
+    static getUserEvents(req, res, next) {
+        let { UserId } = req.params;
+
+        Event.find({UserId})
+            .then(events => {
+                console.log(events)
+                res.status(200).json(events)
+            })
+            .catch(next);
     }
 }
 
