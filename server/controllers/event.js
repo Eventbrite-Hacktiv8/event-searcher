@@ -3,7 +3,7 @@ const Event = require('../models/event');
 
 class EventController {
     static getAllEvents(req, res, next) {
-        axiosEvent.get('/events/search/?location.address=Jakarta&expand=venue')
+        axiosEvent.get('/events/search/?location.address=Jakarta&expand=venue&page=1')
             .then(({data}) => {
                 let events = [];
 
@@ -70,7 +70,7 @@ class EventController {
         Event.findOne({eventId})
         .then(event => {
             if (event) {
-                throw new Error('Event already saved');
+                throw new Error({message:'Event already saved'})
             } else {
                 return Event.create({
                     eventId,
@@ -80,7 +80,7 @@ class EventController {
             }
         })
         .then(event => {
-            console.log(event);
+            // console.log(event);
             res.status(201).json({
                 message: 'Event saved'
             })
